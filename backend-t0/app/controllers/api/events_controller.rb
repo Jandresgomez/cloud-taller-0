@@ -1,6 +1,6 @@
 class Api::EventsController < ApplicationController
     def index
-        render json: @current_user.events
+        render json: @current_user.events.order(:timestamps)
     end
 
     def show
