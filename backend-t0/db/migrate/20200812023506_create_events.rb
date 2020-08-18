@@ -8,7 +8,6 @@ class CreateEvents < ActiveRecord::Migration[6.0]
       t.date :event_initial_date
       t.date :event_final_date
       t.string :event_type
-      t.string :thumbnail
       t.references :user, null: false, foreign_key: true, type: :string
 
       t.timestamps
