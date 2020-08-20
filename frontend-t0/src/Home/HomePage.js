@@ -22,7 +22,7 @@ class HomePage extends React.Component {
             case "Events":
                 return (<EventsTab token={this.state.token}/>)
             case "CreateEvent":
-                return (<CreateEvent token={this.state.token}/>)
+                return (<CreateEvent token={this.state.token} goToMyEvents={() => this.changeTab('Events')}/>)
             default:
                 return (<SignInTab signInCompletion={(token) => this.signInCompletion(token)} />)
         }
