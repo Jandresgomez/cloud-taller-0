@@ -18,7 +18,7 @@ class Api::EventsController < ApplicationController
                 render json: @event.as_json.merge(thumbnail: "")
             end
         else
-            render json: { msg: "Event not found" }
+            render json: { msg: "Event not found" }, status: 400
         end
     end
     
@@ -26,7 +26,7 @@ class Api::EventsController < ApplicationController
         @event = @current_user.events.create(event_params)
         
         if @event.errors.count > 0
-            render json: @event.errors
+            render json: @event.errors, status: 400
         else
             render json: @event.as_json.merge(thumbnail: url_for(@event.thumbnail))
         end
@@ -41,7 +41,7 @@ class Api::EventsController < ApplicationController
                 render json: @event.as_json.merge(thumbnail: "")
             end
         else
-            render json: @event.errors
+            render json: @event.errors, status: 400
         end
     end
 
@@ -50,7 +50,7 @@ class Api::EventsController < ApplicationController
         if @event.delete
             render json: { deleted: @event }
         else
-            render json: @event.errors
+            render json: @event.errors, status: 400
         end
     end
 

@@ -18,7 +18,7 @@ class HomePage extends React.Component {
             case "SignIn":
                 return (<SignInTab signInCompletion={(token) => this.signInCompletion(token)} />)
             case "Register":
-                return (<Register/>)
+                return (<Register registerCompletion={(token) => this.signInCompletion(token)}/>)
             case "Events":
                 return (<EventsTab token={this.state.token}/>)
             case "CreateEvent":
@@ -70,7 +70,7 @@ class HomePage extends React.Component {
             );
         } else {
             return (
-                <ul className="nav nav-pills nav-fill">
+                <ul className="nav nav-tabs nav-fill">
                     <li className="nav-item">
                         <a className={`nav-link ${this.isTabActive("Events")}`} onClick={() => this.changeTab("Events")}>My Events</a>
                     </li>

@@ -3,7 +3,7 @@ class Api::UserController < ApplicationController
 
     def signup
         @user = User.new(user_params)
-        render json: @user.errors unless @user.save
+        render json: @user.errors, status: 400 unless @user.save
     end
 
     private
