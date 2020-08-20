@@ -11,6 +11,10 @@ class CreateEvent extends React.Component {
             event_address: "",
             event_initial_date: "",
             event_final_date: "",
+            event_initial_date_dateval: "",
+            event_initial_date_timeval: "",
+            event_final_date_dateval: "",
+            event_final_date_timeval: "",
             event_type: "VIRTUAL",
             thumbnail: "",
         }
@@ -22,7 +26,7 @@ class CreateEvent extends React.Component {
     submitEventToCreate() {
         var errorlog = "";
         Object.keys(this.state.eventToCreate).map((key) => {
-            if (this.state.eventToCreate[key] === "") {
+            if (this.state.eventToCreate[key] === "" && !["event_initial_date", "event_final_date"].includes(key)) {
                 errorlog = `${errorlog}\n${`The field ${key} cannot be empty.`}`
             }
         });
@@ -32,10 +36,13 @@ class CreateEvent extends React.Component {
             return;
         }
 
-
         const eventData = new FormData();
         Object.keys(this.state.eventToCreate).map((key) => {
-            eventData.append(key, this.state.eventToCreate[key]);
+            if(!["event_initial_date_dateval", "event_initial_date_timeval", "event_final_date_dateval", "event_final_date_timeval", "event_initial_date", "event_final_date"].includes(key)) {
+                eventData.append(key, this.state.eventToCreate[key]);
+            } else if (["event_initial_date", "event_final_date"].includes(key)) {
+                eventData.append(key, this.state.eventToCreate[key + "_dateval"] + "T" + this.state.eventToCreate[key + "_timeval"]);
+            }
         });
 
         axios.post(
@@ -61,6 +68,8 @@ class CreateEvent extends React.Component {
         const target = event.target;
         const name = target.name;
         const value = target.name !== "thumbnail" ? target.value : target.files[0];
+
+        console.log("handle = " + name )
 
         var eventToCreate = this.state.eventToCreate;
         eventToCreate[name] = value;
@@ -99,8 +108,13 @@ class CreateEvent extends React.Component {
             </td>)
         } else if (key === "event_initial_date" || key === "event_final_date") {
             return (<td>
-                <form>
-                    <input className="form-control" value={this.state.eventToCreate[key]} name={key} onChange={(event) => this.handleChange(event)} type="date"></input>
+                <form className="form-inline">
+                    <div className="form-group">
+                        <input className="form-control" value={this.state.eventToCreate[key + "_dateval"]} name={key + "_dateval"} onChange={(event) => this.handleChange(event)} type="date"></input>
+                    </div>
+                    <div className="form-group">
+                        <input className="form-control" value={this.state.eventToCreate[key + "_timeval"]} name={key + "_timeval"} onChange={(event) => this.handleChange(event)} type="time" step="1"></input>
+                    </div>
                 </form>
             </td>)
         } else {
@@ -119,8 +133,8 @@ class CreateEvent extends React.Component {
                     <ul className="nav">
                         <h2 style={{ margin: "1em" }}>New Event</h2>
                         <ul className="nav nav-pills" style={{ margin: "1em" }}>
-                        <button className="btn btn-success" onClick={() => this.submitEventToCreate()} style={{ margin: "1em" }}>Create</button>
-                </ul>
+                            <button className="btn btn-success" onClick={() => this.submitEventToCreate()} style={{ margin: "1em" }}>Create</button>
+                        </ul>
                     </ul>
                 </div>
                 <table className="table">
@@ -132,12 +146,14 @@ class CreateEvent extends React.Component {
                     </thead>
                     <tbody>
                         {Object.keys(this.state.eventToCreate).map((key) => {
-                            return (
-                                <tr key={key}>
-                                    <td>{key}</td>
-                                    {this.showValueRow(key)}
-                                </tr>
-                            );
+                            if(!["event_initial_date_dateval", "event_initial_date_timeval", "event_final_date_dateval", "event_final_date_timeval"].includes(key)) {
+                                return (
+                                    <tr key={key}>
+                                        <td>{key}</td>
+                                        {this.showValueRow(key)}
+                                    </tr>
+                                );
+                            }
                         })}
                     </tbody>
                 </table>

@@ -51,7 +51,11 @@ class EventsTab extends React.Component {
     }
 
     enterEditMode() {
-        let editedEvent = Object.assign({}, this.state.currentEvent);
+        var editedEvent = Object.assign({}, this.state.currentEvent);
+        editedEvent["event_initial_date_dateval"] = this.state.currentEvent["event_initial_date"].split('T')[0]
+        editedEvent["event_initial_date_timeval"] = this.state.currentEvent["event_initial_date"].split('T')[1].split(".")[0]
+        editedEvent["event_final_date_dateval"] = this.state.currentEvent["event_final_date"].split('T')[0]
+        editedEvent["event_final_date_timeval"] = this.state.currentEvent["event_final_date"].split('T')[1].split(".")[0]
 
         this.setState({
             editMode: true,
@@ -82,32 +86,35 @@ class EventsTab extends React.Component {
     submitEditedEvent() {
         const eventData = new FormData();
         Object.keys(this.state.editedEvent).map((key) => {
-            if (!["id", "user_id", "created_at", "updated_at", "thumbnail", "thumbnail_source"].includes(key)) {
+            if (["event_initial_date", "event_final_date"].includes(key)) {
+                eventData.append(key, this.state.editedEvent[key + "_dateval"] + "T" + this.state.editedEvent[key + "_timeval"]);
+            } else if (!["id", "user_id", "created_at", "updated_at", "thumbnail", "thumbnail_source", "event_initial_date_dateval", "event_final_date_dateval", "event_initial_date_timeval", "event_final_date_timeval"].includes(key)) {
                 eventData.append(key, this.state.editedEvent[key]);
             }
         })
-        if(this.state.editedEvent.thumbnail_source) {
+
+        if (this.state.editedEvent.thumbnail_source) {
             eventData.append('thumbnail', this.state.editedEvent.thumbnail_source)
         }
 
         axios.put(
             `http://localhost:8080/api/events/${this.state.currentEvent.id}`,
             eventData,
-            { 
+            {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `${this.props.token}`
                 }
             }
         )
-        .then(res => {
-            console.log(res);
-            this.reloadCurrentEvent()
-            .then(() => this.exitEditMode())
-        })
-        .catch(error => {
-            console.log(error);
-        });
+            .then(res => {
+                console.log(res);
+                this.reloadCurrentEvent()
+                    .then(() => this.exitEditMode())
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     showValueRow(key) {
@@ -140,8 +147,13 @@ class EventsTab extends React.Component {
                 </td>)
             } else if (key === "event_initial_date" || key === "event_final_date") {
                 return (<td>
-                    <form>
-                        <input className="form-control" value={this.state.editedEvent[key]} name={key} onChange={(event) => this.handleChange(event)} type="date"></input>
+                    <form className="form-inline">
+                        <div className="form-group">
+                            <input className="form-control" value={this.state.editedEvent[key + "_dateval"]} name={key + "_dateval"} onChange={(event) => this.handleChange(event)} type="date"></input>
+                        </div>
+                        <div className="form-group">
+                            <input className="form-control" value={this.state.editedEvent[key + "_timeval"]} name={key + "_timeval"} onChange={(event) => this.handleChange(event)} type="time" step="1"></input>
+                        </div>
                     </form>
                 </td>)
             } else {
@@ -153,7 +165,7 @@ class EventsTab extends React.Component {
             }
         } else {
             if (key === "thumbnail") {
-                return (<td><img src={`${this.state.currentEvent.thumbnail}`} alt="Thumbnail" style={{height: "auto", width: "460px"}}></img></td>)
+                return (<td><img src={`${this.state.currentEvent.thumbnail}`} alt="Thumbnail" style={{ height: "auto", width: "460px" }}></img></td>)
             } else {
                 return (<td>{this.state.currentEvent[key]}</td>)
             }
@@ -173,20 +185,20 @@ class EventsTab extends React.Component {
         if (willDelete) {
             axios.delete(
                 `http://localhost:8080/api/events/${this.state.currentEvent.id}`,
-                { 
+                {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'Authorization': `${this.props.token}`
                     }
                 }
             )
-            .then(res => {
-                console.log(res);
-                this.closeEvent();
-            })
-            .catch(error => {
-                console.log(error);
-            });
+                .then(res => {
+                    console.log(res);
+                    this.closeEvent();
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
     }
 
@@ -197,7 +209,7 @@ class EventsTab extends React.Component {
                     <button className="btn btn-success" onClick={() => this.submitEditedEvent()} style={{ margin: "1em" }}>Save</button>
                     <button className="btn btn-secondary" onClick={() => this.exitEditMode()} style={{ margin: "1em" }}>Cancel</button>
                 </ul>
-                )
+            )
 
         } else {
             return (
@@ -249,7 +261,7 @@ class EventsTab extends React.Component {
                         </thead>
                         <tbody>
                             {Object.keys(this.state.currentEvent).map((key) => {
-                                if (!["id", "user_id", "created_at", "updated_at"].includes(key)) {
+                                if (!["id", "user_id", "created_at", "updated_at", "event_initial_date_dateval", "event_final_date_dateval", "event_initial_date_timeval", "event_final_date_timeval"].includes(key)) {
                                     return (
                                         <tr key={key}>
                                             <td>{key}</td>
@@ -281,7 +293,7 @@ class EventsTab extends React.Component {
                                     <td>{event.event_name}</td>
                                     <td>{event.event_category}</td>
                                     <td>{event.event_type}</td>
-                                    <td><img src={`${event.thumbnail}`} alt="Thumbnail" style={{height: "40px", width: "auto"}}></img></td>
+                                    <td><img src={`${event.thumbnail}`} alt="Thumbnail" style={{ height: "40px", width: "auto" }}></img></td>
                                     <td><button className="btn btn-primary" onClick={() => this.showEvent(event)}>Show Details</button></td>
                                 </tr>
                             )
