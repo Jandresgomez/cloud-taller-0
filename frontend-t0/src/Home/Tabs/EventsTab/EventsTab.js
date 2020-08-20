@@ -83,11 +83,11 @@ class EventsTab extends React.Component {
         const eventData = new FormData();
         Object.keys(this.state.editedEvent).map((key) => {
             if (!["id", "user_id", "created_at", "updated_at", "thumbnail", "thumbnail_source"].includes(key)) {
-                eventData.set(key, this.state.editedEvent[key]);
+                eventData.append(key, this.state.editedEvent[key]);
             }
         })
         if(this.state.editedEvent.thumbnail_source) {
-            eventData.set('thumbnail', this.state.editedEvent.thumbnail_source)
+            eventData.append('thumbnail', this.state.editedEvent.thumbnail_source)
         }
 
         axios.put(
@@ -115,7 +115,7 @@ class EventsTab extends React.Component {
             if (key === "thumbnail") {
                 return (<td>
                     <form>
-                        <input type="file" name={key + "_source"} onChange={(event) => this.handleChange(event)}></input>
+                        <input className="form-control-file" type="file" name={key + "_source"} onChange={(event) => this.handleChange(event)}></input>
                     </form>
                 </td>)
             } else if (key === "event_category") {

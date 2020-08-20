@@ -35,7 +35,7 @@ class CreateEvent extends React.Component {
 
         const eventData = new FormData();
         Object.keys(this.state.eventToCreate).map((key) => {
-            eventData.set(key, this.state.eventToCreate[key]);
+            eventData.append(key, this.state.eventToCreate[key]);
         });
 
         axios.post(
@@ -74,7 +74,7 @@ class CreateEvent extends React.Component {
         if (key === "thumbnail") {
             return (<td>
                 <form>
-                    <input type="file" name={key} onChange={(event) => this.handleChange(event)}></input>
+                    <input className="form-control-file" type="file" name={key} onChange={(event) => this.handleChange(event)}></input>
                 </form>
             </td>)
         } else if (key === "event_category") {
