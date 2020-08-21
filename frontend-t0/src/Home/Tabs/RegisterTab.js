@@ -51,7 +51,7 @@ class Register extends React.Component {
         });
 
         axios.post(
-            `http://localhost:8080/api/create-user/`,
+            `http://${process.env.SERVER_URL}/api/create-user/`,
             userData,
             {
                 headers: {
@@ -84,7 +84,7 @@ class Register extends React.Component {
         userData.set('password', this.state.userToCreate.password);
 
         axios.post(
-            'http://localhost:8080/api/api-auth/',
+            `http://${process.env.SERVER_URL}/api/api-auth/`,
             userData,
             { 
                 headers: {

@@ -38,7 +38,7 @@ class CreateEvent extends React.Component {
 
         const eventData = new FormData();
         Object.keys(this.state.eventToCreate).map((key) => {
-            if(!["event_initial_date_dateval", "event_initial_date_timeval", "event_final_date_dateval", "event_final_date_timeval", "event_initial_date", "event_final_date"].includes(key)) {
+            if (!["event_initial_date_dateval", "event_initial_date_timeval", "event_final_date_dateval", "event_final_date_timeval", "event_initial_date", "event_final_date"].includes(key)) {
                 eventData.append(key, this.state.eventToCreate[key]);
             } else if (["event_initial_date", "event_final_date"].includes(key)) {
                 eventData.append(key, this.state.eventToCreate[key + "_dateval"] + "T" + this.state.eventToCreate[key + "_timeval"]);
@@ -46,7 +46,7 @@ class CreateEvent extends React.Component {
         });
 
         axios.post(
-            `http://localhost:8080/api/events/`,
+            `http://${process.env.SERVER_URL}/api/events/`,
             eventData,
             {
                 headers: {
@@ -69,7 +69,7 @@ class CreateEvent extends React.Component {
         const name = target.name;
         const value = target.name !== "thumbnail" ? target.value : target.files[0];
 
-        console.log("handle = " + name )
+        console.log("handle = " + name)
 
         var eventToCreate = this.state.eventToCreate;
         eventToCreate[name] = value;
@@ -146,7 +146,7 @@ class CreateEvent extends React.Component {
                     </thead>
                     <tbody>
                         {Object.keys(this.state.eventToCreate).map((key) => {
-                            if(!["event_initial_date_dateval", "event_initial_date_timeval", "event_final_date_dateval", "event_final_date_timeval"].includes(key)) {
+                            if (!["event_initial_date_dateval", "event_initial_date_timeval", "event_final_date_dateval", "event_final_date_timeval"].includes(key)) {
                                 return (
                                     <tr key={key}>
                                         <td>{key}</td>
