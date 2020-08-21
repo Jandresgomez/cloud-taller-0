@@ -46,7 +46,7 @@ class CreateEvent extends React.Component {
         });
 
         axios.post(
-            `http://${process.env.SERVER_URL}/api/events/`,
+            `http://172.24.98.138:8000/api/events/`,
             eventData,
             {
                 headers: {

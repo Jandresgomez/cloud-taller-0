@@ -16,7 +16,7 @@ class EventsTab extends React.Component {
 
     reloadEvents() {
         axios.get(
-            `http://${process.env.SERVER_URL}/api/events/`,
+            `http://172.24.98.138/api/events/`,
             {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -98,7 +98,7 @@ class EventsTab extends React.Component {
         }
 
         axios.put(
-            `http://${process.env.SERVER_URL}/api/events/${this.state.currentEvent.id}`,
+            `http://172.24.98.138:8000/api/events/${this.state.currentEvent.id}`,
             eventData,
             {
                 headers: {
@@ -184,7 +184,7 @@ class EventsTab extends React.Component {
         var willDelete = window.confirm('Are you sure you want to delete the current event? This action is final and cannot be reversed.')
         if (willDelete) {
             axios.delete(
-                `http://${process.env.SERVER_URL}/api/events/${this.state.currentEvent.id}`,
+                `http://172.24.98.138:8000/api/events/${this.state.currentEvent.id}`,
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
@@ -224,7 +224,7 @@ class EventsTab extends React.Component {
 
     async reloadCurrentEvent() {
         await axios.get(
-            `http://${process.env.SERVER_URL}/api/events/${this.state.currentEvent.id}`,
+            `http://172.24.98.138:8000/api/events/${this.state.currentEvent.id}`,
             {
                 headers: {
                     'Content-Type': 'multipart/form-data',

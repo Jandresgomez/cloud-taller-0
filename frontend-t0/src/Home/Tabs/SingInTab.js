@@ -27,7 +27,7 @@ class SignInTab extends React.Component {
         userData.set('password', this.state.password);
 
         axios.post(
-            `http://${process.env.SERVER_URL}/api/api-auth/`,
+            `http://172.24.98.138/api/api-auth/`,
             userData,
             { 
                 headers: {
