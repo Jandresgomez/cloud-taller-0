@@ -16,7 +16,7 @@ class EventsTab extends React.Component {
 
     reloadEvents() {
         axios.get(
-            `http://172.24.98.138/api/events/`,
+            `http://172.24.98.138:8000/api/events/`,
             {
                 headers: {
                     'Content-Type': 'multipart/form-data',
