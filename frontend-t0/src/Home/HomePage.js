@@ -18,11 +18,11 @@ class HomePage extends React.Component {
             case "SignIn":
                 return (<SignInTab signInCompletion={(token) => this.signInCompletion(token)} />)
             case "Register":
-                return (<Register registerCompletion={(token) => this.signInCompletion(token)}/>)
+                return (<Register registerCompletion={(token) => this.signInCompletion(token)} />)
             case "Events":
-                return (<EventsTab token={this.state.token}/>)
+                return (<EventsTab token={this.state.token} />)
             case "CreateEvent":
-                return (<CreateEvent token={this.state.token} goToMyEvents={() => this.changeTab('Events')}/>)
+                return (<CreateEvent token={this.state.token} goToMyEvents={() => this.changeTab('Events')} />)
             default:
                 return (<SignInTab signInCompletion={(token) => this.signInCompletion(token)} />)
         }
