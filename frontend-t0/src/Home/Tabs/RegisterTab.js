@@ -51,7 +51,7 @@ class Register extends React.Component {
         });
 
         axios.post(
-            `http://172.24.98.138:8000/api/create-user/`,
+            `http://${process.env.REACT_APP_BACKEND_URL}/api/create-user/`,
             userData,
             {
                 headers: {
@@ -84,7 +84,7 @@ class Register extends React.Component {
         userData.set('password', this.state.userToCreate.password);
 
         axios.post(
-            `http://172.24.98.138:8000/api/api-auth/`,
+            `http://${process.env.REACT_APP_BACKEND_URL}/api/api-auth/`,
             userData,
             { 
                 headers: {
